@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Corona Tracking</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Extra+Condensed:wght@700;800;900&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="d-flex mt-4 justify-content-center">
+  <div class="container text-center">
+    <h1 class="display-3 text-danger">Corona Tracking</h1>
+      <div class="row">
+
+        <div class="col-md-12">
+          <div class="row globalData">
+
+          </div>
+        </div>               
+
+        <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Country</th>
+              <th>TotalConfirmed</th>
+              <th>NewConfirmed</th>
+
+              <th>TotalDeaths</th>
+              <th>NewDeaths</th>
+
+              <th>TotalRecovered</th>
+              <th>NewRecovered</th>
+            </tr>
+          </thead>
+          <tbody class="dataList"></tbody>
+        </table>
+      </div>
+      </div>
+   </div>
+  </div>
+  <script>
+    /* For All Countries Details */
+    let url = `https://api.covid19api.com/summary`;
+    let globalData = document.querySelector('.globalData');
+    fetch(url)
+    .then( response => response.json() )
+    .then( result => {      
+      let gData = result.Global;
+      console.log(gData);
+      globalData.innerHTML = `
+      <div class="col-md-4">
+        <div class="card text-white bg-secondary mb-3">
+          <div class="card-header">Total Confirmed</div>
+          <div class="card-body">
+            <h3 class="card-title">${gData.TotalConfirmed}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card text-white bg-secondary mb-3">
+          <div class="card-header">Total Deaths</div>
+          <div class="card-body">
+            <h3 class="card-title">${gData.TotalDeaths}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card text-white bg-secondary mb-3">
+          <div class="card-header">Total Recovered</div>
+          <div class="card-body">
+            <h3 class="card-title">${gData.TotalRecovered}</h3>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-header">New Confirmed</div>
+          <div class="card-body">
+            <h3 class="card-title">${gData.NewConfirmed}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-header">New Deaths</div>
+          <div class="card-body">
+            <h3 class="card-title">${gData.NewDeaths}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-header">New Recovered</div>
+          <div class="card-body">
+            <h3 class="card-title">${gData.NewRecovered}</h3>
+          </div>
+        </div>
+      </div>`
+    })
+    .catch( error => console.log('The Error is = ' + error) )
+
+
+    /* For Each Country Details */
+    let dataList = document.querySelector('.dataList');
+    fetch(url)
+    .then( response => response.json() )
+    .then( result => {      
+      let countriesList = result.Countries;
+      console.log(countriesList);
+      let list = "";
+      countriesList.map( function(data) { 
+         list += `         
+            <tr>
+              <th style="text-align:left; background: #e9ecef">${data.Country}</th>
+              <td>${data.TotalConfirmed}</td>
+              <td>${data.NewConfirmed}</td>
+
+              <td>${data.TotalDeaths}</td>
+              <td>${data.NewDeaths}</td>
+
+              <td>${data.TotalRecovered}</td>                            
+              <td>${data.NewRecovered}</td>
+            </tr>
+         `;
+         })
+      dataList.innerHTML = list;
+    })
+    .catch( error => console.log('The Error is = ' + error) )
+  </script>
+</body>
+</html>
